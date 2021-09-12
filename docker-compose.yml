@@ -3,17 +3,14 @@ services:
 
   web:
     image: fajarkarim/web-custom
-    ports: 
-      - "8080:80"
     networks:
+      - "proxy-net"
       - "int-net"
     depends_on: 
       - mysql
   
   pma:
     image: fajarkarim/pma-custom
-    ports:
-      - "8081:80"
     networks:
       - "proxy-net"
       - "int-net"
@@ -31,8 +28,20 @@ services:
       - MYSQL_PASSWORD=cilsykuasaipassword
       - MYSQL_HOST=mysql
     networks:
-        - "int-net"
+      - "int-net"
+    
+  proxy:
+    image: fajarkarim/proxy-custom
+    depends_on: 
+      - "web"
+      - "pma"
+    ports: 
+      - '80:80'
+    networks:
+      - "proxy-net"
+      - "ext-net"
   
 networks: 
   int-net:
   proxy-net:
+  ext-net:
