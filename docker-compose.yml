@@ -29,6 +29,9 @@ services:
       - MYSQL_HOST=mysql
     networks:
       - "int-net"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
     
   proxy:
     image: fajarkarim/proxy-custom
@@ -40,6 +43,10 @@ services:
     networks:
       - "proxy-net"
       - "ext-net"
+
+volumes: 
+  mysql_data:
+    external: true
   
 networks: 
   int-net:
