@@ -1,0 +1,57 @@
+version: "3.1"
+services:
+
+  web:
+    image: fajarkarim/web-custom
+    networks:
+      - "proxy-net"
+      - "int-net"
+    depends_on: 
+      - mysql
+    deploy: 
+      mode: 'replicated'
+      replicas: 3
+  
+  pma:
+    image: fajarkarim/pma-custom
+    networks:
+      - "proxy-net"
+      - "int-net"
+    depends_on: 
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+
+  mysql: 
+    image: fajarkarim/mysql-custom
+    environment: 
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=dbkuasai
+      - MYSQL_USER=cilsykuasaiuser
+      - MYSQL_PASSWORD=cilsykuasaipassword
+      - MYSQL_HOST=mysql
+    networks:
+      - "int-net"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    
+  proxy:
+    image: fajarkarim/proxy-custom
+    depends_on: 
+      - "web"
+      - "pma"
+    ports: 
+      - '80:80'
+    networks:
+      - "proxy-net"
+      - "ext-net"
+
+volumes: 
+  mysql_data:
+    external: true
+  
+networks: 
+  int-net:
+  proxy-net:
+  ext-net:
