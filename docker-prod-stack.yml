@@ -10,7 +10,7 @@ services:
       - mysql
     deploy: 
       mode: 'replicated'
-      replicas: 3
+      replicas: 2
   
   pma:
     image: fajarkarim/pma-custom
@@ -21,6 +21,9 @@ services:
       - mysql
     environment:
       - PMA_HOST=mysql
+    deploy: 
+      mode: 'replicated'
+      replicas: 2
 
   mysql: 
     image: fajarkarim/mysql-custom
@@ -34,6 +37,9 @@ services:
       - "int-net"
     volumes:
       - mysql_data:/var/lib/mysql
+    deploy: 
+      mode: 'replicated'
+      replicas: 2
 
     
   proxy:
@@ -46,6 +52,9 @@ services:
     networks:
       - "proxy-net"
       - "ext-net"
+    deploy: 
+      mode: 'replicated'
+      replicas: 2
 
 volumes: 
   mysql_data:
