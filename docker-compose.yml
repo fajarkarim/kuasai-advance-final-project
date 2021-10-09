@@ -18,6 +18,8 @@ services:
       - mysql
     environment:
       - PMA_HOST=mysql
+    ports:
+      - "8089:80"
 
   mysql: 
     image: fajarkarim/mysql-custom
